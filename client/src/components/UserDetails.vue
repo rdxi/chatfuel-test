@@ -89,7 +89,6 @@ export default {
         that.id = response.data.id;
         that.name = response.data.name;
         that.avatarUrl = response.data.avatarUrl;
-        console.log(response);
       }).catch((error) => {console.log(error.response); that.notFound = true;});
     },
 
