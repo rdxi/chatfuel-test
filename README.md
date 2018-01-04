@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+Online demo: [https://aqueous-earth-84085.herokuapp.com/](https://aqueous-earth-84085.herokuapp.com/)
+
 <img src="https://github.com/rdxi/chatfuel-test/raw/master/design--chatfuel.png" width=600>
 
 
