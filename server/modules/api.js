@@ -1,10 +1,32 @@
 var express = require('express');
 var app = express();
 var db = require('./database.js');
-// var moment = require('moment');
 
 app.get('/users', function (req, res) {
-  var data = db.get('users').value();
+  var data = {
+    result: []
+  };
+  var itemsOnPage = 10;
+  var fromItem = parseInt(req.query.fromItem) || 0;
+  var toItem = fromItem + itemsOnPage;
+  var totalItemsLength = db.get('users').size().value();
+  var items = db.get('users').value().slice(fromItem, toItem);
+  var lastItemTotal = db.get('users').last().value();
+  var lastItem = items[items.length-1];
+  var isLastPage = (lastItem.id === lastItemTotal.id);
+
+  data.result = items;
+
+  if (totalItemsLength > items.length && !isLastPage) {
+    data.nextPageUrl = '?fromItem=' + toItem;
+  }
+
+  if (fromItem > 0) {
+    let pages = (fromItem - itemsOnPage);
+    pages = pages < 0 ? 0 : pages;
+    data.previousPageUrl = '?fromItem=' + pages.toString();
+  }
+
   res.send(data);
 });
 
@@ -30,30 +52,5 @@ app.post('/users/:id', function (req, res) {
   db.get('users').find({ id: req.params.id }).assign(newUserData).write();
   res.send('updated, t-thanks');
 });
-
-// app.post('/posts', function (req, res) {
-//   var newPost = {
-//     text: req.body.text,
-//     id: new Date().getTime(),
-//     date: moment().format('MMM Do, HH:mm')
-//   };
-
-//   if (req.body.text) {
-//     db.get('posts').push(newPost).write();
-//     res.send(newPost);
-//   } else {
-//     res.status(400).send(newPost);
-//   }
-// });
-
-// app.delete('/posts/:id', function (req, res) {
-//   var deleteResult = db.get('posts').remove({ id: parseInt(req.params.id, 10) }).write();
-
-//   if (deleteResult.length) {
-//     res.status(200).send(deleteResult);
-//   } else {
-//     res.status(400).send(deleteResult);
-//   }
-// });
 
 module.exports = app;

@@ -46,11 +46,11 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-a87fb01c", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-a87fb01c", __vue__options__)
+    hotAPI.reload("data-v-a87fb01c", __vue__options__)
   }
 })()}
 },{"vue":37,"vue-hot-reload-api":35}],3:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".user-list[data-v-ab2a9df0] {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.user-item[data-v-ab2a9df0] {\n  list-style: none;\n  width: 25%;\n  padding: 5px;\n  box-sizing: border-box;\n}\n@media (max-width: 420px) {\n  .user-item[data-v-ab2a9df0] {\n    width: 100%;\n  }\n}\n\n.user-item a[data-v-ab2a9df0] {\n  display: flex;\n  padding: 10px;\n  outline: 1px solid #ccc;\n}\n\n.user-item a[data-v-ab2a9df0]:hover {\n  opacity: 0.8;\n}\n\n.user-avatar[data-v-ab2a9df0] {\n  width: 50px;\n  height: 50px;\n  margin-right: 10px;\n  flex-shrink: 0;\n}\n\n.user-avatar img[data-v-ab2a9df0] {\n  border-radius: 50%;\n}\n\n.user-list-pager[data-v-ab2a9df0] {\n  margin-top: 10px;\n  text-align: center;\n}\n\n.user-list-pager a[data-v-ab2a9df0] {\n  margin-left: 5px;\n  margin-right: 5px;\n}\n/* .posts {\n  display: flex;\n  justify-content: center;\n}\n\n.post-list {\n  width: 70%;\n}\n\n.post-item {\n  width: 100%;\n  display: flex;\n  margin-bottom: 20px;\n  padding: 10px;\n  box-sizing: border-box;\n  outline: 1px solid rgb(169, 169, 169);\n}\n\n.post-date {\n  width: 100px;\n  flex-shrink: 0;\n}\n\n.post-text {\n  margin-left: 20px;\n  margin-right: 20px;\n  word-break: break-all;\n  white-space: pre-wrap;\n}\n\n.post-button {\n  width: 100px;\n  margin-left: auto;\n  flex-shrink: 0;\n}\n\n.post-button button {\n  width: 100%;\n}\n\n.post-form {\n  position: relative;\n  width: 30%;\n  display: flex;\n  flex-direction: column;\n  margin-right: 20px;\n}\n\n.post-form textarea {\n  height: 150px;\n  padding: 10px;\n  resize: none;\n}\n\n.post-form-error {\n  padding: 5px;\n  position: absolute;\n  bottom: 100%;\n  left: 0;\n  right: 0;\n  background-color: maroon;\n  color: #fff;\n}\n\n@media (max-width: 420px) {\n  .posts {\n    flex-direction: column;\n  }\n\n  .post-form {\n    width: 100%;\n    margin-right: 0;\n    margin-bottom: 20px;\n  }\n\n  .post-list {\n    width: 100%;\n  }\n\n  .post-item {\n    flex-direction: column;\n  }\n\n  .post-text {\n    margin: 0;\n    margin-top: 10px;\n    margin-bottom: 10px;\n  }\n\n  .post-button {\n    margin-left: 0;\n  }\n} */")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".user-list[data-v-ab2a9df0] {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.user-item[data-v-ab2a9df0] {\n  list-style: none;\n  width: 25%;\n  padding: 5px;\n  box-sizing: border-box;\n}\n@media (max-width: 420px) {\n  .user-item[data-v-ab2a9df0] {\n    width: 100%;\n  }\n}\n\n.user-item a[data-v-ab2a9df0] {\n  display: flex;\n  padding: 10px;\n  outline: 1px solid #ccc;\n}\n\n.user-item a[data-v-ab2a9df0]:hover {\n  opacity: 0.8;\n}\n\n.user-avatar[data-v-ab2a9df0] {\n  width: 50px;\n  height: 50px;\n  margin-right: 10px;\n  flex-shrink: 0;\n}\n\n.user-avatar img[data-v-ab2a9df0] {\n  border-radius: 50%;\n}\n\n.user-list-pager[data-v-ab2a9df0] {\n  margin-top: 10px;\n  text-align: center;\n}\n\n.user-list-pager a[data-v-ab2a9df0] {\n  margin-left: 5px;\n  margin-right: 5px;\n}")
 ;(function(){
 'use strict';
 
@@ -74,6 +74,12 @@ exports.default = {
     };
   },
 
+  watch: {
+    '$route': function $route(to, from) {
+      this.getInitialData();
+    }
+  },
+
   created: function created() {
     this.getInitialData();
   },
@@ -81,20 +87,25 @@ exports.default = {
   methods: {
     getInitialData: function getInitialData() {
       var that = this;
-      _axios2.default.get('/users').then(function (response) {
-        that.users = response.data;
+      var url = '/users';
+      if (this.$route.query.fromItem) {
+        url = '/users' + '/?fromItem=' + this.$route.query.fromItem;
+      }
+      _axios2.default.get(url).then(function (response) {
+        that.users = response.data.result;
+        that.previousPageUrl = response.data.previousPageUrl;
+        that.nextPageUrl = response.data.nextPageUrl;
       }).catch(function (error) {
         return console.log(error.response);
       });
     }
   }
-
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--index"},[_c('h3',[_vm._v("User list")]),_vm._v(" "),_c('p',[_vm._v("Click on user to see details")]),_vm._v(" "),_c('div',{staticClass:"users"},[_c('ul',{staticClass:"user-list"},_vm._l((_vm.users),function(user,index){return _c('li',{key:index,staticClass:"user-item"},[_c('router-link',{attrs:{"to":'user/' + user.id}},[_c('div',{staticClass:"user-avatar"},[_c('img',{attrs:{"src":user.avatarUrl,"alt":user.name}})]),_vm._v(" "),_c('div',{staticClass:"user-name"},[_vm._v(_vm._s(user.name))])])],1)})),_vm._v(" "),_c('div',{staticClass:"user-list-pager"},[_c('a',{attrs:{"href":_vm.previousPageUrl ? _vm.previousPageUrl : null}},[_vm._v("« Prev")]),_vm._v(" "),_c('a',{attrs:{"href":_vm.nextPageUrl ? _vm.nextPageUrl : null}},[_vm._v("Next »")])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--index"},[_c('h3',[_vm._v("User list")]),_vm._v(" "),_c('p',[_vm._v("Click on user to see details")]),_vm._v(" "),_c('div',{staticClass:"users"},[_c('ul',{staticClass:"user-list"},_vm._l((_vm.users),function(user,index){return _c('li',{key:index,staticClass:"user-item"},[_c('router-link',{attrs:{"to":'user/' + user.id}},[_c('div',{staticClass:"user-avatar"},[_c('img',{attrs:{"src":user.avatarUrl,"alt":user.name}})]),_vm._v(" "),_c('div',{staticClass:"user-name"},[_vm._v(_vm._s(user.name))])])],1)})),_vm._v(" "),_c('div',{staticClass:"user-list-pager"},[(_vm.previousPageUrl)?_c('router-link',{attrs:{"to":_vm.previousPageUrl}},[_vm._v("« Prev")]):_c('a',[_vm._v("« Prev")]),_vm._v(" "),(_vm.nextPageUrl)?_c('router-link',{attrs:{"to":_vm.nextPageUrl}},[_vm._v("Next »")]):_c('a',[_vm._v("Next »")])],1)])])}
 __vue__options__.staticRenderFns = []
 __vue__options__._scopeId = "data-v-ab2a9df0"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
@@ -198,6 +209,7 @@ exports.default = {
 
   created: function created() {
     this.getInitialData();
+    console.log(this.$route);
   },
 
   methods: {
@@ -248,6 +260,12 @@ exports.default = {
         return console.log(error.response);
       });
     }
+  },
+
+  watch: {
+    '$route': function $route(to, from) {
+      this.getInitialData();
+    }
   }
 
 };
@@ -255,7 +273,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--user"},[_c('h3',[_vm._v("User details")]),_vm._v(" "),_c('p',[_vm._v("Name can be edited here")]),_vm._v(" "),_c('div',{staticClass:"link-home"},[_c('router-link',{attrs:{"to":"/"}},[_vm._v("Back to user list")])],1),_vm._v(" "),_c('div',{staticClass:"user"},[_c('div',{staticClass:"user-avatar"},[_c('img',{attrs:{"src":_vm.avatarUrl,"alt":_vm.name}})]),_vm._v(" "),_c('div',{staticClass:"user-details"},[_c('div',{staticClass:"user-id"},[_vm._v("User id: "+_vm._s(_vm.id))]),_vm._v(" "),_c('div',{staticClass:"user-name"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.isEditing),expression:"!isEditing"}],staticClass:"user-name-normal"},[_c('div',[_vm._v(_vm._s(_vm.name))]),_vm._v(" "),_c('button',{on:{"click":_vm.startEditing}},[_vm._v("Edit name")])]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isEditing),expression:"isEditing"}],staticClass:"user-name-edit"},[_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newName),expression:"newName"}],ref:"editNameInput",attrs:{"type":"text","maxlength":"500"},domProps:{"value":(_vm.newName)},on:{"keyup":[function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.stopEditing(true)},function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"esc",27,$event.key)){ return null; }_vm.stopEditing(false)}],"input":function($event){if($event.target.composing){ return; }_vm.newName=$event.target.value}}})]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(true)}}},[_vm._v("Confirm")]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(false)}}},[_vm._v("Cancel")])])])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--user"},[_c('h3',[_vm._v("User details")]),_vm._v(" "),_c('p',[_vm._v("Name can be edited here")]),_vm._v(" "),_c('div',{staticClass:"link-home"},[_c('a',{attrs:{"href":"#"},on:{"click":function($event){_vm.$router.go(-1)}}},[_vm._v("Go Back")])]),_vm._v(" "),_c('div',{staticClass:"user"},[_c('div',{staticClass:"user-avatar"},[_c('img',{attrs:{"src":_vm.avatarUrl,"alt":_vm.name}})]),_vm._v(" "),_c('div',{staticClass:"user-details"},[_c('div',{staticClass:"user-id"},[_vm._v("User id: "+_vm._s(_vm.id))]),_vm._v(" "),_c('div',{staticClass:"user-name"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.isEditing),expression:"!isEditing"}],staticClass:"user-name-normal"},[_c('div',[_vm._v(_vm._s(_vm.name))]),_vm._v(" "),_c('button',{on:{"click":_vm.startEditing}},[_vm._v("Edit name")])]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isEditing),expression:"isEditing"}],staticClass:"user-name-edit"},[_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newName),expression:"newName"}],ref:"editNameInput",attrs:{"type":"text","maxlength":"500"},domProps:{"value":(_vm.newName)},on:{"keyup":[function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.stopEditing(true)},function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"esc",27,$event.key)){ return null; }_vm.stopEditing(false)}],"input":function($event){if($event.target.composing){ return; }_vm.newName=$event.target.value}}})]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(true)}}},[_vm._v("Confirm")]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(false)}}},[_vm._v("Cancel")])])])])])])}
 __vue__options__.staticRenderFns = []
 __vue__options__._scopeId = "data-v-11543269"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
@@ -300,6 +318,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _vue2.default.use(_vueRouter2.default);
 var router = new _vueRouter2.default({
+
   routes: [{ path: '/', component: _IndexPage2.default }, { path: '/user/:id', component: _UserPage2.default }, { path: '*', component: _2.default }]
 });
 

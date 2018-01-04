@@ -7,6 +7,7 @@ import UserPage from '../pages/UserPage.vue';
 
 Vue.use(VueRouter);
 const router = new VueRouter({
+
   routes: [
     { path: '/', component: IndexPage },
     { path: '/user/:id', component: UserPage },

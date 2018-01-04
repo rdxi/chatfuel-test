@@ -3,7 +3,7 @@
     <h3>User details</h3>
     <p>Name can be edited here</p>
     <div class="link-home">
-      <router-link to="/">Back to user list</router-link>
+      <a href="#" @click="$router.go(-1)">Go Back</a>
     </div>
     <div class="user">
       <div class="user-avatar">
@@ -52,6 +52,7 @@ export default {
 
   created: function() {
     this.getInitialData();
+    console.log(this.$route);
   },
 
   methods: {
@@ -98,15 +99,15 @@ export default {
         console.log(response);
       }).catch((error) => console.log(error.response));
     }
-  }
+  },
 
   // TODO: make sure components reload if url is changed directly "reacting to param changes" https://router.vuejs.org/en/essentials/dynamic-matching.html
   // beforeRouteUpdate (to, from, next) {},
-  // watch: {
-  //   '$route' (to, from) {
-  //     // react to route changes...
-  //   }
-  // }
+  watch: {
+    '$route' (to, from) {
+      this.getInitialData();
+    }
+  }
 
 }
 </script>

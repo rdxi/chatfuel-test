@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+<img src="https://raw.githubusercontent.com/rdxi/chatfuel-test/master/design--chattr.png" width=600>
+
 ## Usage
 
 ```
