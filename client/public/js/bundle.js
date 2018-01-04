@@ -23,7 +23,31 @@ new _vue2.default({
   }
 });
 
-},{"./components/App.vue":2,"./router/router.js":7,"vue":37}],2:[function(require,module,exports){
+},{"./components/App.vue":3,"./router/router.js":6,"vue":36}],2:[function(require,module,exports){
+;(function(){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--404"},[_c('h3',[_vm._v("404 page not found")]),_vm._v(" "),_c('p',[_c('router-link',{attrs:{"to":"/"}},[_vm._v("go home")])],1)])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e8e908ae", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-e8e908ae", __vue__options__)
+  }
+})()}
+},{"vue":36,"vue-hot-reload-api":34}],3:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -49,7 +73,115 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-a87fb01c", __vue__options__)
   }
 })()}
-},{"vue":37,"vue-hot-reload-api":35}],3:[function(require,module,exports){
+},{"vue":36,"vue-hot-reload-api":34}],4:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".user[data-v-1bddddc8] {\n  max-width: 600px;\n  margin: auto;\n  display: flex;\n  flex-wrap: wrap;\n  padding: 10px;\n  outline: 1px solid #ccc;\n}\n\n.user-avatar[data-v-1bddddc8] {\n  width: 100px;\n  height: 100px;\n  margin-right: 10px;\n}\n\n.user-avatar img[data-v-1bddddc8] {\n  width: 100%;\n}\n\n.user-details[data-v-1bddddc8] {\n  display: flex;\n  flex-direction: column;\n}\n\n.user-name[data-v-1bddddc8] {\n  font-size: 2em;\n  font-weight: 600;\n}\n\n.link-home[data-v-1bddddc8] {\n  text-align: center;\n  margin-bottom: 1em;\n}\n\n.user-not-found[data-v-1bddddc8] {\n  text-align: center;\n  font-size: 2em;\n}\n\n.link-to-list[data-v-1bddddc8] {\n  margin-left: 20px;\n}")
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  data: function data() {
+    return {
+      id: '',
+      name: 'Fetching data...',
+      avatarUrl: '',
+      isEditing: false,
+      newName: '',
+      notFound: null
+    };
+  },
+
+  created: function created() {
+    this.getInitialData();
+  },
+
+  methods: {
+    startEditing: function startEditing() {
+      var that = this;
+      this.isEditing = true;
+      this.newName = this.name;
+
+      setTimeout(function () {
+        that.$refs.editNameInput.focus();
+      }, 10);
+    },
+
+    stopEditing: function stopEditing(confirm) {
+      var isEmpty = this.newName === '';
+      var isSame = this.newName === this.name;
+
+      if (confirm === true && !isEmpty && !isSame) {
+        this.isEditing = false;
+        this.name = this.newName;
+        this.postNewName();
+      } else {
+        this.isEditing = false;
+        this.newName = this.name;
+      }
+    },
+
+    getInitialData: function getInitialData() {
+      var that = this;
+      _axios2.default.get('/user/' + this.$route.params.id).then(function (response) {
+        that.id = response.data.id;
+        that.name = response.data.name;
+        that.avatarUrl = response.data.avatarUrl;
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error.response);that.notFound = true;
+      });
+    },
+
+    postNewName: function postNewName() {
+      var that = this;
+      var newUserData = {
+        name: this.name,
+        avatarUrl: this.avatarUrl
+      };
+      _axios2.default.post('/users/' + this.$route.params.id, newUserData).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        return console.log(error.response);
+      });
+    }
+  },
+
+  watch: {
+    '$route': function $route(to, from) {
+      this.notFound = null;
+      this.getInitialData();
+    }
+  }
+
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--user"},[_c('h3',[_vm._v("User details")]),_vm._v(" "),_c('p',[_vm._v("Name can be edited here")]),_vm._v(" "),_c('div',{staticClass:"link-home"},[_c('a',{attrs:{"href":"#"},on:{"click":function($event){_vm.$router.go(-1)}}},[_vm._v("Go to previous page")])]),_vm._v(" "),(_vm.notFound)?_c('div',{staticClass:"user-not-found"},[_vm._v("\n    User not found!\n  ")]):_vm._e(),_vm._v(" "),(!_vm.notFound)?_c('div',{staticClass:"user"},[_c('div',{staticClass:"user-avatar"},[_c('img',{attrs:{"src":_vm.avatarUrl,"alt":_vm.name}})]),_vm._v(" "),_c('div',{staticClass:"user-details"},[_c('div',{staticClass:"user-id"},[_vm._v("User id: "+_vm._s(_vm.id))]),_vm._v(" "),_c('div',{staticClass:"user-name"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.isEditing),expression:"!isEditing"}],staticClass:"user-name-normal"},[_c('div',[_vm._v(_vm._s(_vm.name))]),_vm._v(" "),_c('button',{on:{"click":_vm.startEditing}},[_vm._v("Edit name")])]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isEditing),expression:"isEditing"}],staticClass:"user-name-edit"},[_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newName),expression:"newName"}],ref:"editNameInput",attrs:{"type":"text","maxlength":"500"},domProps:{"value":(_vm.newName)},on:{"keyup":[function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.stopEditing(true)},function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"esc",27,$event.key)){ return null; }_vm.stopEditing(false)}],"input":function($event){if($event.target.composing){ return; }_vm.newName=$event.target.value}}})]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(true)}}},[_vm._v("Confirm")]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(false)}}},[_vm._v("Cancel")])])])])]):_vm._e()])}
+__vue__options__.staticRenderFns = []
+__vue__options__._scopeId = "data-v-1bddddc8"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  module.hot.dispose(__vueify_style_dispose__)
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1bddddc8", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-1bddddc8", __vue__options__)
+  }
+})()}
+},{"axios":7,"vue":36,"vue-hot-reload-api":34,"vueify/lib/insert-css":37}],5:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".user-list[data-v-ab2a9df0] {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.user-item[data-v-ab2a9df0] {\n  list-style: none;\n  width: 25%;\n  padding: 5px;\n  box-sizing: border-box;\n}\n@media (max-width: 420px) {\n  .user-item[data-v-ab2a9df0] {\n    width: 100%;\n  }\n}\n\n.user-item a[data-v-ab2a9df0] {\n  display: flex;\n  padding: 10px;\n  outline: 1px solid #ccc;\n}\n\n.user-item a[data-v-ab2a9df0]:hover {\n  opacity: 0.8;\n}\n\n.user-avatar[data-v-ab2a9df0] {\n  width: 50px;\n  height: 50px;\n  margin-right: 10px;\n  flex-shrink: 0;\n}\n\n.user-avatar img[data-v-ab2a9df0] {\n  border-radius: 50%;\n}\n\n.user-list-pager[data-v-ab2a9df0] {\n  margin-top: 10px;\n  text-align: center;\n}\n\n.user-list-pager a[data-v-ab2a9df0] {\n  margin-left: 5px;\n  margin-right: 5px;\n}")
 ;(function(){
 'use strict';
@@ -119,175 +251,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ab2a9df0", __vue__options__)
   }
 })()}
-},{"axios":8,"vue":37,"vue-hot-reload-api":35,"vueify/lib/insert-css":38}],4:[function(require,module,exports){
-;(function(){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {};
-})()
-if (module.exports.__esModule) module.exports = module.exports.default
-var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
-if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--404"},[_c('h3',[_vm._v("404 page not found")]),_vm._v(" "),_c('p',[_c('router-link',{attrs:{"to":"/"}},[_vm._v("go home")])],1)])}
-__vue__options__.staticRenderFns = []
-if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4635d48e", __vue__options__)
-  } else {
-    hotAPI.reload("data-v-4635d48e", __vue__options__)
-  }
-})()}
-},{"vue":37,"vue-hot-reload-api":35}],5:[function(require,module,exports){
-;(function(){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _UserList = require('./../components/UserList.vue');
-
-var _UserList2 = _interopRequireDefault(_UserList);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  components: {
-    UserList: _UserList2.default
-  },
-  data: function data() {
-    return {};
-  }
-};
-})()
-if (module.exports.__esModule) module.exports = module.exports.default
-var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
-if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('user-list')}
-__vue__options__.staticRenderFns = []
-if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-54c3b8bc", __vue__options__)
-  } else {
-    hotAPI.reload("data-v-54c3b8bc", __vue__options__)
-  }
-})()}
-},{"./../components/UserList.vue":3,"vue":37,"vue-hot-reload-api":35}],6:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".user[data-v-11543269] {\n  max-width: 600px;\n  margin: auto;\n  display: flex;\n  flex-wrap: wrap;\n  padding: 10px;\n  outline: 1px solid #ccc;\n}\n\n.user-avatar[data-v-11543269] {\n  width: 100px;\n  height: 100px;\n  margin-right: 10px;\n}\n\n.user-avatar img[data-v-11543269] {\n  width: 100%;\n}\n\n.user-details[data-v-11543269] {\n  display: flex;\n  flex-direction: column;\n}\n\n.user-name[data-v-11543269] {\n  font-size: 2em;\n  font-weight: 600;\n}\n\n/* .user-name-edit {\n  margin-top: auto;\n} */\n\n.link-home[data-v-11543269] {\n  text-align: center;\n  margin-bottom: 1em;\n}")
-;(function(){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _axios = require('axios');
-
-var _axios2 = _interopRequireDefault(_axios);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  data: function data() {
-    return {
-      isEditing: false,
-      newName: '',
-      id: '',
-      name: 'Fetching data...',
-      avatarUrl: ''
-    };
-  },
-
-  created: function created() {
-    this.getInitialData();
-    console.log(this.$route);
-  },
-
-  methods: {
-    startEditing: function startEditing() {
-      var that = this;
-      this.isEditing = true;
-      this.newName = this.name;
-
-      setTimeout(function () {
-        that.$refs.editNameInput.focus();
-      }, 10);
-    },
-
-    stopEditing: function stopEditing(confirm) {
-      var isEmpty = this.newName === '';
-      var isSame = this.newName === this.name;
-
-      if (confirm === true && !isEmpty && !isSame) {
-        this.isEditing = false;
-        this.name = this.newName;
-        this.postNewName();
-      } else {
-        this.isEditing = false;
-        this.newName = this.name;
-      }
-    },
-
-    getInitialData: function getInitialData() {
-      var that = this;
-      _axios2.default.get('/user/' + this.$route.params.id).then(function (response) {
-        that.id = response.data.id;
-        that.name = response.data.name;
-        that.avatarUrl = response.data.avatarUrl;
-      }).catch(function (error) {
-        return console.log(error.response);
-      });
-    },
-
-    postNewName: function postNewName() {
-      var that = this;
-      var newUserData = {
-        name: this.name,
-        avatarUrl: this.avatarUrl
-      };
-      _axios2.default.post('/users/' + this.$route.params.id, newUserData).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        return console.log(error.response);
-      });
-    }
-  },
-
-  watch: {
-    '$route': function $route(to, from) {
-      this.getInitialData();
-    }
-  }
-
-};
-})()
-if (module.exports.__esModule) module.exports = module.exports.default
-var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
-if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page page--user"},[_c('h3',[_vm._v("User details")]),_vm._v(" "),_c('p',[_vm._v("Name can be edited here")]),_vm._v(" "),_c('div',{staticClass:"link-home"},[_c('a',{attrs:{"href":"#"},on:{"click":function($event){_vm.$router.go(-1)}}},[_vm._v("Go Back")])]),_vm._v(" "),_c('div',{staticClass:"user"},[_c('div',{staticClass:"user-avatar"},[_c('img',{attrs:{"src":_vm.avatarUrl,"alt":_vm.name}})]),_vm._v(" "),_c('div',{staticClass:"user-details"},[_c('div',{staticClass:"user-id"},[_vm._v("User id: "+_vm._s(_vm.id))]),_vm._v(" "),_c('div',{staticClass:"user-name"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.isEditing),expression:"!isEditing"}],staticClass:"user-name-normal"},[_c('div',[_vm._v(_vm._s(_vm.name))]),_vm._v(" "),_c('button',{on:{"click":_vm.startEditing}},[_vm._v("Edit name")])]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isEditing),expression:"isEditing"}],staticClass:"user-name-edit"},[_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newName),expression:"newName"}],ref:"editNameInput",attrs:{"type":"text","maxlength":"500"},domProps:{"value":(_vm.newName)},on:{"keyup":[function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.stopEditing(true)},function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"esc",27,$event.key)){ return null; }_vm.stopEditing(false)}],"input":function($event){if($event.target.composing){ return; }_vm.newName=$event.target.value}}})]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(true)}}},[_vm._v("Confirm")]),_vm._v(" "),_c('button',{on:{"click":function($event){_vm.stopEditing(false)}}},[_vm._v("Cancel")])])])])])])}
-__vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-11543269"
-if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  module.hot.dispose(__vueify_style_dispose__)
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-11543269", __vue__options__)
-  } else {
-    hotAPI.rerender("data-v-11543269", __vue__options__)
-  }
-})()}
-},{"axios":8,"vue":37,"vue-hot-reload-api":35,"vueify/lib/insert-css":38}],7:[function(require,module,exports){
+},{"axios":7,"vue":36,"vue-hot-reload-api":34,"vueify/lib/insert-css":37}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -302,31 +266,31 @@ var _vueRouter = require('vue-router');
 
 var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
-var _ = require('../pages/404.vue');
+var _ = require('../components/404.vue');
 
 var _2 = _interopRequireDefault(_);
 
-var _IndexPage = require('../pages/IndexPage.vue');
+var _UserList = require('../components/UserList.vue');
 
-var _IndexPage2 = _interopRequireDefault(_IndexPage);
+var _UserList2 = _interopRequireDefault(_UserList);
 
-var _UserPage = require('../pages/UserPage.vue');
+var _UserDetails = require('../components/UserDetails.vue');
 
-var _UserPage2 = _interopRequireDefault(_UserPage);
+var _UserDetails2 = _interopRequireDefault(_UserDetails);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(_vueRouter2.default);
 var router = new _vueRouter2.default({
 
-  routes: [{ path: '/', component: _IndexPage2.default }, { path: '/user/:id', component: _UserPage2.default }, { path: '*', component: _2.default }]
+  routes: [{ path: '/', component: _UserList2.default }, { path: '/user/:id', component: _UserDetails2.default }, { path: '*', component: _2.default }]
 });
 
 exports.default = router;
 
-},{"../pages/404.vue":4,"../pages/IndexPage.vue":5,"../pages/UserPage.vue":6,"vue":37,"vue-router":36}],8:[function(require,module,exports){
+},{"../components/404.vue":2,"../components/UserDetails.vue":4,"../components/UserList.vue":5,"vue":36,"vue-router":35}],7:[function(require,module,exports){
 module.exports = require('./lib/axios');
-},{"./lib/axios":10}],9:[function(require,module,exports){
+},{"./lib/axios":9}],8:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -510,7 +474,7 @@ module.exports = function xhrAdapter(config) {
 };
 
 }).call(this,require('_process'))
-},{"../core/createError":16,"./../core/settle":19,"./../helpers/btoa":23,"./../helpers/buildURL":24,"./../helpers/cookies":26,"./../helpers/isURLSameOrigin":28,"./../helpers/parseHeaders":30,"./../utils":32,"_process":34}],10:[function(require,module,exports){
+},{"../core/createError":15,"./../core/settle":18,"./../helpers/btoa":22,"./../helpers/buildURL":23,"./../helpers/cookies":25,"./../helpers/isURLSameOrigin":27,"./../helpers/parseHeaders":29,"./../utils":31,"_process":33}],9:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -564,7 +528,7 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-},{"./cancel/Cancel":11,"./cancel/CancelToken":12,"./cancel/isCancel":13,"./core/Axios":14,"./defaults":21,"./helpers/bind":22,"./helpers/spread":31,"./utils":32}],11:[function(require,module,exports){
+},{"./cancel/Cancel":10,"./cancel/CancelToken":11,"./cancel/isCancel":12,"./core/Axios":13,"./defaults":20,"./helpers/bind":21,"./helpers/spread":30,"./utils":31}],10:[function(require,module,exports){
 'use strict';
 
 /**
@@ -585,7 +549,7 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var Cancel = require('./Cancel');
@@ -644,14 +608,14 @@ CancelToken.source = function source() {
 
 module.exports = CancelToken;
 
-},{"./Cancel":11}],13:[function(require,module,exports){
+},{"./Cancel":10}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./../defaults');
@@ -732,7 +696,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = Axios;
 
-},{"./../defaults":21,"./../utils":32,"./InterceptorManager":15,"./dispatchRequest":17}],15:[function(require,module,exports){
+},{"./../defaults":20,"./../utils":31,"./InterceptorManager":14,"./dispatchRequest":16}],14:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -786,7 +750,7 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 
 module.exports = InterceptorManager;
 
-},{"./../utils":32}],16:[function(require,module,exports){
+},{"./../utils":31}],15:[function(require,module,exports){
 'use strict';
 
 var enhanceError = require('./enhanceError');
@@ -806,7 +770,7 @@ module.exports = function createError(message, config, code, request, response) 
   return enhanceError(error, config, code, request, response);
 };
 
-},{"./enhanceError":18}],17:[function(require,module,exports){
+},{"./enhanceError":17}],16:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -894,7 +858,7 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
-},{"../cancel/isCancel":13,"../defaults":21,"./../helpers/combineURLs":25,"./../helpers/isAbsoluteURL":27,"./../utils":32,"./transformData":20}],18:[function(require,module,exports){
+},{"../cancel/isCancel":12,"../defaults":20,"./../helpers/combineURLs":24,"./../helpers/isAbsoluteURL":26,"./../utils":31,"./transformData":19}],17:[function(require,module,exports){
 'use strict';
 
 /**
@@ -917,7 +881,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
   return error;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 var createError = require('./createError');
@@ -945,7 +909,7 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
-},{"./createError":16}],20:[function(require,module,exports){
+},{"./createError":15}],19:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -967,7 +931,7 @@ module.exports = function transformData(data, headers, fns) {
   return data;
 };
 
-},{"./../utils":32}],21:[function(require,module,exports){
+},{"./../utils":31}],20:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1063,7 +1027,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 }).call(this,require('_process'))
-},{"./adapters/http":9,"./adapters/xhr":9,"./helpers/normalizeHeaderName":29,"./utils":32,"_process":34}],22:[function(require,module,exports){
+},{"./adapters/http":8,"./adapters/xhr":8,"./helpers/normalizeHeaderName":28,"./utils":31,"_process":33}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -1076,7 +1040,7 @@ module.exports = function bind(fn, thisArg) {
   };
 };
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 // btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
@@ -1114,7 +1078,7 @@ function btoa(input) {
 
 module.exports = btoa;
 
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1184,7 +1148,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-},{"./../utils":32}],25:[function(require,module,exports){
+},{"./../utils":31}],24:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1200,7 +1164,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
     : baseURL;
 };
 
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1255,7 +1219,7 @@ module.exports = (
   })()
 );
 
-},{"./../utils":32}],27:[function(require,module,exports){
+},{"./../utils":31}],26:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1271,7 +1235,7 @@ module.exports = function isAbsoluteURL(url) {
   return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
 };
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1341,7 +1305,7 @@ module.exports = (
   })()
 );
 
-},{"./../utils":32}],29:[function(require,module,exports){
+},{"./../utils":31}],28:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils');
@@ -1355,7 +1319,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
-},{"../utils":32}],30:[function(require,module,exports){
+},{"../utils":31}],29:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1410,7 +1374,7 @@ module.exports = function parseHeaders(headers) {
   return parsed;
 };
 
-},{"./../utils":32}],31:[function(require,module,exports){
+},{"./../utils":31}],30:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1439,7 +1403,7 @@ module.exports = function spread(callback) {
   };
 };
 
-},{}],32:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var bind = require('./helpers/bind');
@@ -1744,7 +1708,7 @@ module.exports = {
   trim: trim
 };
 
-},{"./helpers/bind":22,"is-buffer":33}],33:[function(require,module,exports){
+},{"./helpers/bind":21,"is-buffer":32}],32:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -1767,7 +1731,7 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -1953,7 +1917,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],35:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = (window.__VUE_HOT_MAP__ = Object.create(null))
@@ -2183,7 +2147,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 (function (process){
 /**
   * vue-router v3.0.1
@@ -4812,7 +4776,7 @@ if (inBrowser && window.Vue) {
 module.exports = VueRouter;
 
 }).call(this,require('_process'))
-},{"_process":34}],37:[function(require,module,exports){
+},{"_process":33}],36:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.5.13
@@ -15627,7 +15591,7 @@ Vue$3.compile = compileToFunctions;
 module.exports = Vue$3;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":34}],38:[function(require,module,exports){
+},{"_process":33}],37:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}

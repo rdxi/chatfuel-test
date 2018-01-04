@@ -6,10 +6,13 @@ app.get('/users', function (req, res) {
   var data = {
     result: []
   };
+
   var itemsOnPage = 10;
-  var fromItem = parseInt(req.query.fromItem) || 0;
-  var toItem = fromItem + itemsOnPage;
   var totalItemsLength = db.get('users').size().value();
+  var fromItem = parseInt(req.query.fromItem) || 0;
+  if (fromItem > totalItemsLength) {fromItem = totalItemsLength - 1;}
+  if (fromItem < 0) {fromItem = 0;}
+  var toItem = fromItem + itemsOnPage;
   var items = db.get('users').value().slice(fromItem, toItem);
   var lastItemTotal = db.get('users').last().value();
   var lastItem = items[items.length-1];
@@ -32,6 +35,11 @@ app.get('/users', function (req, res) {
 
 app.get('/user/:id', function (req, res) {
   var data = db.get('users').find({id: req.params.id}).value();
+  if (!data) {
+    data = {message: 'Not found'};
+    res.status(404).send(data);
+    return;
+  }
   res.send(data);
 });
 

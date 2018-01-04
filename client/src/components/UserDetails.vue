@@ -3,9 +3,12 @@
     <h3>User details</h3>
     <p>Name can be edited here</p>
     <div class="link-home">
-      <a href="#" @click="$router.go(-1)">Go Back</a>
+      <a href="#" @click="$router.go(-1)">Go to previous page</a>
     </div>
-    <div class="user">
+    <div class="user-not-found" v-if="notFound">
+      User not found!
+    </div>
+    <div class="user" v-if="!notFound">
       <div class="user-avatar">
         <img :src="avatarUrl" :alt="name" >
       </div>
@@ -42,17 +45,17 @@ import axios from 'axios';
 export default {
   data: function() {
     return {
-      isEditing: false,
-      newName: '',
       id: '',
       name: 'Fetching data...',
-      avatarUrl: ''
+      avatarUrl: '',
+      isEditing: false,
+      newName: '',
+      notFound: null
     }
   },
 
   created: function() {
     this.getInitialData();
-    console.log(this.$route);
   },
 
   methods: {
@@ -86,7 +89,8 @@ export default {
         that.id = response.data.id;
         that.name = response.data.name;
         that.avatarUrl = response.data.avatarUrl;
-      }).catch((error) => console.log(error.response));
+        console.log(response);
+      }).catch((error) => {console.log(error.response); that.notFound = true;});
     },
 
     postNewName: function() {
@@ -101,10 +105,9 @@ export default {
     }
   },
 
-  // TODO: make sure components reload if url is changed directly "reacting to param changes" https://router.vuejs.org/en/essentials/dynamic-matching.html
-  // beforeRouteUpdate (to, from, next) {},
   watch: {
     '$route' (to, from) {
+      this.notFound = null;
       this.getInitialData();
     }
   }
@@ -142,12 +145,17 @@ export default {
     font-weight: 600;
   }
 
-  /* .user-name-edit {
-    margin-top: auto;
-  } */
-
   .link-home {
     text-align: center;
     margin-bottom: 1em;
+  }
+
+  .user-not-found {
+    text-align: center;
+    font-size: 2em;
+  }
+
+  .link-to-list {
+    margin-left: 20px;
   }
 </style>
