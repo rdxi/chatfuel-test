@@ -32,7 +32,7 @@ export default {
   data: function() {
     return {
       previousPageUrl: '',
-      nextPageUrl: 'http://some-url99999999999.com',
+      nextPageUrl: '',
       users: []
     }
   },

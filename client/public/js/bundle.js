@@ -200,7 +200,7 @@ exports.default = {
   data: function data() {
     return {
       previousPageUrl: '',
-      nextPageUrl: 'http://some-url99999999999.com',
+      nextPageUrl: '',
       users: []
     };
   },
