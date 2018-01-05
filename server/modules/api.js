@@ -10,7 +10,7 @@ app.get('/users', function (req, res) {
   var itemsOnPage = 10;
   var totalItemsLength = db.get('users').size().value();
   var fromItem = parseInt(req.query.fromItem) || 0;
-  if (fromItem > totalItemsLength) {fromItem = totalItemsLength - 1;}
+  if (fromItem >= totalItemsLength) {fromItem = totalItemsLength - 1;}
   if (fromItem < 0) {fromItem = 0;}
   var toItem = fromItem + itemsOnPage;
   var items = db.get('users').value().slice(fromItem, toItem);
